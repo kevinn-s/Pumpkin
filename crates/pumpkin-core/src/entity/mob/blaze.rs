@@ -13,6 +13,7 @@ use crate::entity::{
     ai::goal::{
         look_around::RandomLookAroundGoal, look_at_entity::LookAtEntityGoal, swim::SwimGoal,
         wander_around::WanderAroundGoal,
+        water_avoiding_random_stroll::WaterAvoidingRandomStrollGoal,
     },
     mob::{Mob, MobEntity},
 };
@@ -57,6 +58,10 @@ impl BlazeEntity {
                 LookAtEntityGoal::with_default(mob_weak, &EntityType::PLAYER, 8.0),
             );
             goal_selector.add_goal(8, Box::new(RandomLookAroundGoal::default()));
+            goal_selector.add_goal(
+                7,
+                Box::new(WaterAvoidingRandomStrollGoal::with_probability(1.0, 0.0)),
+            );
 
             target_selector.add_goal(1, Box::new(RevengeGoal::new(true).alerting_others()));
             hunting::apply(target_selector, &mob_arc.entity, BLAZE_HUNTS);
